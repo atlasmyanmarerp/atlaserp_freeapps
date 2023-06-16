@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_move_form_inherit_sl_acc_discount" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.sl.discount</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <field name="narration" position="before" >
+                <field name="sl_discount_type" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                <field name="sl_account_discount" attrs="
+                    {'readonly': [('state', '!=', 'draft')], 'invisible': [('sl_discount_type', '=', 'percent')]}" />
+                <field name="sl_acc_discount_per" attrs="
+                    {'readonly': [('state', '!=', 'draft')], 'invisible': [('sl_discount_type', '=', 'amount')]}"
+                    widget="percentage" />
+                <button name="update_discount" type="object" string="Add" class="btn-primary" />
+            </field>
+        </field>
+    </record>
+
+</odoo>

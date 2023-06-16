@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="goods_clearnace_rp" >
+        <t t-call="web.html_container">
+            <style>
+                .table-bordered{
+                    border:1px solid black;
+                }
+            </style>
+            <t t-name="PrintImage">
+                <html>
+                    <head>
+                        <script>
+                            function onload_img() {
+                                setTimeout('print_img()', 5);
+                            }
+                            function print_img() {
+                                window.print();
+                                window.close();
+                            }
+                        </script>
+                    </head>
+                    <body onload='onload_img()'>
+                    </body>
+                </html>
+            </t>
+            
+            <h2 class="text-center">ကုန်သည်ရှင်းတမ်း</h2>
+            <br/>
+            <t t-foreach="docs" t-as="o">
+                <table width="100%">
+                <tr>
+                    <td width="25%">အမည်</td>
+                    <td width="25%"><span t-field="o.partner_id.name"/></td>
+                    <td width="25%">ရက်စွဲ</td>
+                    <td width="25%"><span t-field="o.invoice_date"/></td>
+                </tr>
+                <tr>
+                    <td width="25%">နေရပ်လိပ်စာ</td>
+                    <td width="25%"></td>
+                    <td width="25%">ကုန်မာလကာ</td>
+                    <td width="25%"><span t-field="o.company_id.name"/></td>
+                </tr>
+                <tr>
+                    <td width="25%">ကုန်ဝင်အမှတ်</td>
+                    <td width="25%"><span t-field="o.name"/></td>
+                    <td width="25%"></td>
+                    <td width="25%"></td>
+                </tr>
+                <tr>
+                    <td width="25%">ကုန်ဝင်ရက်စွဲ</td>
+                    <td width="25%"></td>
+                    <td width="25%"></td>
+                    <td width="25%"></td>
+                </tr>
+                </table>
+                <br/>
+                <table width="100%" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="20%" class="text-center">ကုန်အမျိုးအစား</th>
+                            <t t-if="o.is_tag">
+                                <th class="sl-bordered sl-center">Product Tag</th>
+                            </t>
+                            <th width="10%" class="text-center">အရေအတွက်</th>
+                            <th width="20%" class="text-center">ကုန်ချိန်</th>
+                            <th width="25%" class="text-center">ဈေးနှုန်း</th>
+                            <th width="25%" class="text-center">ကုန်ဖိုးငွေ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="pt" t-value="0"/>
+                        <t t-set="tansar_t" t-value="0"/>
+                        <t t-set="labour_t" t-value="0"/>
+                        <t t-set="service_charges_t" t-value="0"/>
+                        <t t-set="spt" t-value="0"/>
+                        <t t-foreach="o.sl_inv_line_ids" t-as="l">
+                            <t t-if="l.product_id.detailed_type=='service' and l.product_id.sl_service_type=='tansar'">
+                                <t t-set="tansar_t" t-value="tansar_t+l.price_subtotal"/>
+                            </t>
+                            <t t-if="l.product_id.detailed_type=='service' and l.product_id.sl_service_type=='labour'">
+                                <t t-set="labour_t" t-value="labour_t+l.price_subtotal"/>
+                            </t>
+                            <!-- <t t-if="l.product_id.detailed_type=='service' and l.product_id.sl_service_type=='tansar'">
+                                <t t-set="tansar_t" t-value="tansar_t+l.price_subtotal"/>
+                            </t> -->
+                            <t t-if="l.product_id.detailed_type=='service' and l.product_id.sl_service_type=='service_charges'">
+                                <t t-set="service_charges_t" t-value="service_charges_t+l.price_subtotal"/>
+                            </t>
+                            <tr t-if="l.product_id.detailed_type=='product'">
+                                <t t-set="pt" t-value="pt+l.price_subtotal"/>
+                                <td ><span t-field="l.product_id.display_name"/></td>
+                                <t t-if="o.is_tag">
+                                    <td class="sl-bordered"><span t-field="l.display_tag"/></td>
+                                </t>
+                                <td style="text-align:right;"><span t-field="l.quantity"/></td>
+                                <td style="text-align:right;"><span t-field="l.sl_weight"/></td>
+                                <td style="text-align:right;"><span t-field="l.org_price_unit"/></td>
+                                <td style="text-align:right;"><span t-field="l.price_subtotal"/></td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <t t-set="tax_totals" t-value="o.tax_totals"/>
+                            <td colspan="4" style="text-align:right;">ကုန်ဖိုး</td>
+                            <td style="text-align:right;" ><span t-esc="pt"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <table width="100%">
+                    <td width="50%">
+                        <table width="100%" class="table table-bordered">
+                            <tr>
+                                <td width="50%">တန်ဆာ/ကားခ</td>
+                                <td width="50%"><span t-esc="tansar_t" /></td>
+                            </tr>
+                            <tr>
+                                <td width="50%">လုပ်သားခ</td>
+                                <td width="50%"><span t-esc="labour_t" /></td>
+                            </tr>
+                            <tr>
+                                <td width="50%">လုပ်အားခ</td>
+                                <td width="50%"></td>
+                            </tr>
+                            <tr>
+                                <td width="50%">ပြုပြင်စရိတ်</td>
+                                <td width="50%"><span t-esc="service_charges_t" /></td>
+                            </tr>
+                            <tr>
+                                <td width="50%">စရိတ်ငွေပေါင်း</td>
+                                <td width="50%"><t t-esc="tansar_t+labour_t+service_charges_t"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="50%">
+                        <table width="100%" class="table table-bordered">
+                            <tr>
+                                <td width="50%">ကုန်ဖိုး</td>
+                                <td width="50%"><span t-esc="pt" /></td>
+                            </tr>
+                            <tr>
+                                <td width="50%">ကြိုတင်ယူငွေ</td>
+                                <td width="50%"></td>
+                            </tr>
+                            <tr>
+                                <td width="50%">စရိတ်ငွေပေါင်း</td>
+                                <td width="50%"><span t-esc="tansar_t+labour_t+service_charges_t" /></td>
+                            </tr>
+                            <tr>
+                                <td width="50%">ကျန်ငွေ</td>
+                                <td width="50%"></td>
+                            </tr>
+                        </table>
+                        <table width="100%">
+                            <tr style="border: none !important;">
+                                <td width="50%">ငွေပေးသူ ...................</td>
+                                <td width="50%">ငွေလက်ခံသူ ...................</td>
+                            </tr>
+                        </table>
+                    </td>
+                </table>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sl_custom_invoice" >
+        <t t-call="web.html_container">
+            <style>
+                .sl-bordered{
+                    border:1px solid black;
+                    padding: 2px 2px 2px 2px;
+                    padding-left: 5px;
+                    margin: 2px 2px 2px 2px;
+                    border-collapse: collapse;
+                }
+                .sl-right{
+                    text-align:right;
+                }
+                .sl-center{
+                    text-align:center;
+                }
+            </style>
+            <t t-name="PrintImage">
+                <html>
+                    <head>
+                        <script>
+                            function onload_img() {
+                                setTimeout('print_img()', 5);
+                            }
+                            function print_img() {
+                                window.print();
+                                window.close();
+                            }
+                        </script>
+                    </head>
+                    <body onload='onload_img()'>
+                    </body>
+                </html>
+            </t>
+            <page>
+                <t t-foreach="docs" t-as="o">
+                <t t-set="pt" t-value="0"/>
+                <t t-set="st" t-value="0"/>
+                <t t-set="inv_t" t-value="0"/>
+                <t t-set="bag_t" t-value="0"/>
+                <t t-set="other_t" t-value="0"/>
+                <t t-set="tansar_t" t-value="0"/>
+                <t t-set="labour_t" t-value="0"/>
+                <t t-set="packaging_t" t-value="0"/>
+                <t t-set="salt_t" t-value="0"/>
+                <t t-set="tape_t" t-value="0"/>
+                <t t-set="basket_t" t-value="0"/>
+                <t t-set="service_charges_t" t-value="0"/>
+                <table width="100%">
+                    <tr>
+                        <td style="font-size:15px;width:15%;">ဘောင်ချာ နံပါတ်:</td>
+                        <td style="text-align:left;width:55%;" colspan="2"><span t-field="o.name" /></td>
+                        <td style="text-align:right;width:10%;">ရက်စွဲ</td>
+                        <td style="text-align:right;width:20%;"><span t-field="o.invoice_date" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width:20%;">အမည်:</td>
+                        <td style="widht:30%;"><span t-field="o.partner_id.name" /></td>
+                        <td>နေရပ်:</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </table>
+                <br/>
+                <table width="100%" style="border-collapse: collapse;" >
+                    <thead>
+                        <tr>
+                            <!-- <th class="sl-bordered">No.</th> -->
+                            <th class="sl-bordered sl-center">ကုန်အဖိုးအမည်</th>
+                            <t t-if="o.is_tag">
+                                <th class="sl-bordered sl-center">Product Tag</th>
+                            </t>
+                            <th class="sl-bordered sl-center">ဦးရေ</th>
+                            <th class="sl-bordered sl-center">ကုန်ချိန်</th>
+                            <th class="sl-bordered sl-center">ဈေးနှုန်း</th>
+                            <th class="sl-bordered">သင့်ငွေ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.sl_inv_line_sec_ids" t-as="sl">
+                            <t t-if="sl.product_id.sl_service_type==False" >
+                                <t t-set="pt" t-value="pt+sl.price_subtotal"/>
+                                <!-- <td class="sl-bordered"></td> -->
+                                <td class="sl-bordered"><span t-field="sl.product_id.name"/></td>
+                                <t t-if="o.is_tag">
+                                    <td class="sl-bordered"><span t-field="sl.display_tag"/></td>
+                                </t>
+                                <td class="sl-bordered sl-right"><span t-field="sl.quantity"/></td>
+                                <td class="sl-bordered sl-right"><span t-field="sl.sl_weight"/></td>
+                                <td class="sl-bordered sl-right"><span t-field="sl.org_price_unit"/></td>
+                                <td class="sl-bordered sl-right"><span t-field="sl.price_subtotal"/></td>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='bag'">
+                                <t t-set="bag_t" t-value="bag_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='other'">
+                                <t t-set="other_t" t-value="other_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='tansar'">
+                                <t t-set="tansar_t" t-value="tansar_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='labour'">
+                                <t t-set="labour_t" t-value="labour_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='packaging'">
+                                <t t-set="packaging_t" t-value="packaging_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='salt'">
+                                <t t-set="salt_t" t-value="salt_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='tape'">
+                                <t t-set="tape_t" t-value="tape_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='basket'">
+                                <t t-set="basket_t" t-value="basket_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-elif="sl.product_id.sl_service_type=='service_charges'">
+                                <t t-set="service_charges_t" t-value="service_charges_t+sl.price_subtotal"/>
+                            </t>
+                            <t t-else="">
+                                <t t-set="st" t-value="st+sl.price_subtotal"/>
+                            </t>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><br/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">ငွေပေးချေရန်ကာလ (  ) ရက်အတွင်း</td>
+                            <td class="sl-bordered" colspan="2">ကုန်ဖိုး</td>
+                            <td class="sl-bordered sl-right"><t t-esc="pt"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">ငွေပေးချေရမယ့်ရက် - </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">ကျေးဇူးပြု၍ သတ်မှတ်ရက်အတွင်း</td>
+                            <td class="sl-bordered" colspan="2">ပီနံ / ဂုန်နီ / အတွင်းခံ</td>
+                            <td class="sl-bordered sl-right"><t t-esc="bag_t"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">ငွေပေးချေပေးပါရန်မေတ္တာရပ်ခံအပ်ပါသည်</td>
+                            <td class="sl-bordered" colspan="2">တင်ခ+ခါ+ကူး+ချုပ်</td>
+                            <td class="sl-bordered sl-right"><t t-esc="other_t"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">အသေးစိတ်သိရှိလိုပါက အောက်ပါဖုန်းနံပါတ်များကို</td>
+                            <td class="sl-bordered" colspan="2">ဂိတ်ပို့ + ကားတန်ဆာ</td>
+                            <td class="sl-bordered sl-right"><t t-esc="tansar_t"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">ဆက်သွယ်မေးမြန်းနိုင်ပါသည်။</td>
+                            <td class="sl-bordered" colspan="2">ဆားဖိုး</td>
+                            <td class="sl-bordered sl-right"><t t-esc="salt_t"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">၀၉- ၉၄၆ ၂၃၆ ၉၇၉, ၉၄၆ ၂၃၆၉၈၀</td>
+                            <td class="sl-bordered" colspan="2">ဖော့ + တိတ်</td>
+                            <td class="sl-bordered sl-right"><t t-esc="tape_t"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="sl-bordered" colspan="2">ခြင်း + တောင်း</td>
+                            <td class="sl-bordered sl-right"><t t-esc="basket_t"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="sl-bordered" colspan="2">စုစုပေါင်း</td>
+                            <td class="sl-bordered sl-right"><t t-esc="pt+bag_t+other_t+tansar_t+salt_t+tape_t+basket_t"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/>
+                <div class="row">
+                    <div class="col-3">
+                        <span></span>
+                    </div>
+                    <div class="col-3">
+                        <span>စာရင်းကိုင် .....................</span>
+                    </div>
+                    <div class="col-3">
+                        <span>ငွေလက်ခံသူ .....................</span>
+                    </div>
+                    <div class="col-3">
+                        <span>ငွေသွင်းသူ .....................</span>
+                    </div>
+                </div>
+            </t>
+            </page>
+            
+        </t>
+    </template>
+
+</odoo>

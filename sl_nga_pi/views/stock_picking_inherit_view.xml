@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_picking_form_inherit_sl_ngapi" model="ir.ui.view">
+        <field name="name">stock.picking.form.sl.ngapi</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <button name="action_set_quantities_to_reservation" position="before">
+                <button name="auto_assign_serial" attrs="{'invisible': ['|', ('state', 'in', ('done', 'cancel')), ('picking_type_code', '!=', 'incoming')]}" string="Assign" type="object" class="oe_highlight" />
+            </button>
+        </field>
+    </record>
+
+</odoo>

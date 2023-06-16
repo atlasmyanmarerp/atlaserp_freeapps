@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_form_inherit_sl_nga_pi" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sl.nga.pi</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//form//field[@name='name']" position="after">
+                <field name="owner_id" domain="[('id', 'in', available_owner_ids)]" options="{'no_create': True}" />
+                <field name="lot_id" domain="[('id', 'in', available_lot_ids)]" options="{'no_create': True}" />
+                <field name="sl_product_tag" />
+                <field name="sl_weight" />
+                <field name="available_owner_ids" invisible="1" />
+                <field name="available_lot_ids" invisible="1" />
+                <field name="po_id" invisible="1" />
+                <field name="po_line_id" invisible="1" />
+                <field name="qty_available" />
+                <field name="bill_invoice_id" invisible="1" />
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
+                <field name="available_owner_ids" invisible="1" />
+                <field name="available_lot_ids" invisible="1" />
+                <field name="owner_id" domain="[('id', 'in', available_owner_ids)]" options="{'no_create': True}"/>
+                <field name="lot_id" domain="[('id', 'in', available_lot_ids)]" options="{'no_create': True}" />
+                <field name="sl_product_tag" widget="many2many_tags" />
+                <field name="orighin_sl_weight" />
+                <field name="sl_weight_loss" />
+                <field name="sl_weight" />
+                <field name="po_id" invisible="1" />
+                <field name="po_line_id" invisible="1" />
+                <field name="qty_available" />
+                <field name="bill_invoice_id" invisible="1" />
+            </xpath>
+            <field name="partner_id" position="after">
+                <field name="sl_weight_by" />
+                <label for="sl_sold_by_fir" string="Sold By"/>
+                <div class="o_row">
+                    <field name="sl_sold_by_fir" class="oe_inline" placeholder="First Person"/>
+                    <span>&#38;<field name="sl_sold_by_sec" class="oe_inline" placeholder="Second Person"/></span>
+                </div>
+            </field>
+            <div class="oe_title" position="before">
+                <div class="oe_title" attrs="{'invisible': [('sl_total_due_warning', '=', False)]}">
+                    <h3>
+                        <field name="sl_total_due_warning" attrs="{'invisible': [('sl_total_due_warning', '=', False)]}" style='color:Red;'/>
+                    </h3>
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

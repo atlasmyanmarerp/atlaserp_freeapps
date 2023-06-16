@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sl_so_total_line,sl.so.total.line,model_sl_so_total_line,base.group_user,1,1,1,1
+access_sl_inv_line_sec,sl.inv.line.sec,model_sl_inv_line_sec,base.group_user,1,1,0,0
+access_sl_inv_line,sl.inv.line,model_sl_inv_line,base.group_user,1,1,1,1
+access_product_tags,sl.product.tag,model_sl_product_tag,base.group_user,1,1,1,1
