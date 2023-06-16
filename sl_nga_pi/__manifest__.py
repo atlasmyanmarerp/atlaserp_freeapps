@@ -5,10 +5,10 @@
     'version': '16.0',
     'summary': "Consignment-base fish market business flow",
     'description': "Consignment-based Inventory Management System, Integrated with Purchase and Sales",
-    'support': "atlasmyanmarerp@gmail.com"
+    'support': "atlasmyanmarerp@gmail.com",
     'author': "Atlas Myanmar ERP",
     'website': "https://www.atlasmyanmarerp.com",
-    'live_test_url': 'https://www.youtube.com/watch?v=QCtEe-zsCtQ'
+    'live_test_url': 'https://www.youtube.com/watch?v=QCtEe-zsCtQ',
     'depends': ['base', 'sale', 'stock', 'purchase', 'account', 'base_accounting_kit'],
 
 

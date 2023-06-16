@@ -3,8 +3,8 @@
     'name': "Account Discount",
     'category': 'Inventory',
 
-    'summary': "Discount on Billing"
-    'description': "Discount Amount on Bill "
+    'summary': "Discount on Billing",
+    'description': "Discount Amount on Bill ",
 
     'author': "Atlas Myanmar ERP",
     'website': "https://www.atlasmyanmarerp.com",
